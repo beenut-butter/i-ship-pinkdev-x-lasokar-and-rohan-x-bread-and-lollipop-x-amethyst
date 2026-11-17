@@ -704,9 +704,9 @@ this._menuFsBtn = this.add.image(33, 33, "GJ_WebSheet", _0x28fa5b ? "toggleFulls
  this._expandHitArea(this._menuFsBtn, 1.5);
  this._toggleFullscreen();
  }, () => this._menuActive);
- this._menuInfoBtn = this.add.image(screenWidth + 20, 33, "GJ_GameSheet03", "communityCreditsBtn_001.png").setScrollFactor(0).setDepth(30).setScale(0.64).setTint(Phaser.Display.Color.GetColor(255, 255, 255)).setInteractive();
+ this._menuInfoBtn = this.add.image(screenWidth + 20, 35, "GJ_GameSheet03", "communityCreditsBtn_001.png").setScrollFactor(0).setDepth(30).setScale(0.73).setTint(Phaser.Display.Color.GetColor(255, 255, 255)).setInteractive();
  this._expandHitArea(this._menuInfoBtn, 1.5);
- this._makeBouncyButton(this._menuInfoBtn, 0.64, () => {
+ this._makeBouncyButton(this._menuInfoBtn, 0.73, () => {
  this._buildInfoPopup();
  }, () => this._menuActive && !this._infoPopup);
  this._menuSettingsBtn = this.add.image(centerX + 92, screenHeight - 90, "GJ_GameSheet03", "GJ_optionsBtn_001.png").setScrollFactor(0).setDepth(30).setInteractive();
@@ -3939,7 +3939,7 @@ const startY = containerY + marginY + iconSize / 2;
  this._percentageLabel.setVisible(false);
  this._percentageLabel.setDepth(100);
 
- this._noclipIndicator = this.add.bitmapText(10, 10, "bigFont", "Noclip", 20)
+ this._noclipIndicator = this.add.bitmapText(10, 10, "bigFont", "Ignore Damage", 20)
  .setOrigin(0, 0)
  .setAlpha(0.4)
  .setDepth(100)
@@ -5493,8 +5493,8 @@ _buildSettingsPopup() {
  "Startpos Switcher": "Switches between start positions in a level.",
  "Progress Bar": "Shows a progress bar at the top of the screen.",
  "Smart StartPos": "Sets the mode, size, speed and gravity of start positions to match the level.",
- "Noclip": "Allows you to phase throught mostly anything that would kill you normally.",
- "Noclip Accuracy": "Flashes your screen red when you would've died with noclip.",
+ "Ignore Damage": "Allows you to phase throught mostly anything that would kill you normally.",
+ "Ignore Damage Accuracy": "Flashes your screen red when you would've died with noclip.",
  "Macro Bot": "Lets you record and replay your inputs for a level.",
  "Show Hitboxes": "Shows you the hitboxes for objects and your player.",
  "Hitbox Trail": "Shows the hitbox of exactly where your hitbox has been.",
@@ -5739,22 +5739,22 @@ _buildSettingsPopup() {
  "Progress Bar"
  );
 
- createToggle(container, column1X, startY + (spacingY * 3), "Noclip",
+ createToggle(container, column1X, startY + (spacingY * 3), "Ignore Damage",
  () => window.noClip,
  (v) => window.noClip = v,
  (v) => { if (this._noclipIndicator) this._noclipIndicator.setVisible(v); },
  undefined,
  25,
- "Noclip"
+ "Ignore Damage"
  );
 
- createToggle(container, column1X, startY + (spacingY * 4), "Noclip Accuracy",
+ createToggle(container, column1X, startY + (spacingY * 4), "Ignore Damage Accuracy",
  () => window.noClipAccuracy,
  (v) => window.noClipAccuracy = v,
  null,
- 25,
+ 22,
  true,
- "Noclip Accuracy"
+ "Ignore Damage Accuracy"
  );
 
  createToggle(container, column1X, startY + (spacingY * 5), "Macro Bot",
@@ -6633,7 +6633,7 @@ _buildSettingsPopup() {
  const xPos = screenWidth / 2;
  const centerY = screenHeight / 2;
  const popupWidth = 500;
- const popupContentHeight = 250;
+ let popupContentHeight = 250;
  this._reqpopup = this.add.container(0, 0).setScrollFactor(0).setDepth(1000);
 
  const background = this.add.rectangle(xPos, centerY, screenWidth, screenHeight, 0, 100 / 255).setInteractive();
@@ -6643,15 +6643,12 @@ _buildSettingsPopup() {
  this._reqpopup.add(bounceContainer);
 
  const cornerRadius = this.textures.get("GJ_square02").source[0].width * 0.325;
- const popupBg = this._drawScale9(0, 0, popupWidth, popupContentHeight, "GJ_square02", cornerRadius, 16777215, 1);
+ let popupBg = this._drawScale9(0, 0, popupWidth, popupContentHeight, "GJ_square02", cornerRadius, 16777215, 1);
  bounceContainer.add(popupBg);
 
  const closeBtn = this.add.image(-(popupWidth / 2) + 20, -(popupContentHeight / 2) + 20, "GJ_WebSheet", "GJ_closeBtn_001.png").setScale(1).setInteractive();
  bounceContainer.add(closeBtn);
  this._makeBouncyButton(closeBtn, 1, () => this._closeReqPopup());
-
- const lock = this.add.image(0, 110, "GJ_GameSheet03", "GJ_lockGray_001.png").setOrigin(0.5).setSize(1.5);
- bounceContainer.add(lock);
 
  const statusText = this.add.text(0, popupContentHeight / 2 - 90, "Or, call 480-957-8838 for more info.", {
  fontFamily: "Arial",
@@ -6692,6 +6689,45 @@ _buildSettingsPopup() {
  align: "center"
  }).setOrigin(0.5, 0.5);
  bounceContainer.add(statusText5);
+
+ const statusText6 = this.add.text(0, 25, "...because I created this menu.", {
+ fontFamily: "Arial",
+ fontSize: "17px",
+ color: "#92a7c0",
+ align: "center"
+ }).setOrigin(0.5, 0.5).setVisible(false);
+ bounceContainer.add(statusText6);
+
+ const lock = this.add.image(0, 110, "GJ_GameSheet03", "GJ_lockGray_001.png").setOrigin(0.5).setInteractive();
+ this._expandHitArea(lock, 1.5);
+ bounceContainer.add(lock);
+ let isMessageShown = false;
+ this._makeBouncyButton(lock, 1, () => {
+ isMessageShown = !isMessageShown;
+ if (isMessageShown) {
+ statusText.setText("Orrrr... Message ameth7st_nya!").setPosition(0, -10);
+ statusText2.setVisible(false);
+ statusText3.setVisible(false);
+ statusText4.setVisible(false);
+ statusText5.setVisible(false);
+ statusText6.setVisible(true);
+ popupContentHeight = 190;
+ lock.setY(80);
+ } else {
+ statusText.setText("Or, call 480-957-8838 for more info.").setPosition(0, 35);
+ statusText2.setVisible(true);
+ statusText3.setVisible(true);
+ statusText4.setVisible(true);
+ statusText5.setVisible(true);
+ statusText6.setVisible(false);
+ popupContentHeight = 250;
+ lock.setY(110);
+ }
+ popupBg.destroy();
+ popupBg = this._drawScale9(0, 0, popupWidth, popupContentHeight, "GJ_square02", cornerRadius, 16777215, 1);
+ bounceContainer.addAt(popupBg, 0);
+ closeBtn.setPosition(-(popupWidth / 2) + 20, -(popupContentHeight / 2) + 20);
+ });
 
  this.tweens.add({
  targets: bounceContainer,
@@ -6842,8 +6878,9 @@ _showwippopup() {
  this.tweens.add({
  targets: box,
  scale: { from: 0, to: 1 },
- duration: 280,
- ease: "Back.Out"
+ duration: 660,
+ ease: "Elastic.Out",
+ easeParams: [1, 0.6]
  });
  }
  InfoBoxStopAThing() {
@@ -7087,9 +7124,11 @@ _showwippopup() {
  const background = this.add.rectangle(xPos, centerY, screenWidth, screenHeight, 0, 100 / 255);
  background.setInteractive();
  this._newsPopup.add(background);
+ const newsPanel = this.add.container(-screenWidth, 0).setScrollFactor(0);
+ this._newsPopup.add(newsPanel);
  const cornerRadius = this.textures.get("GJ_square01").source[0].width * 0.325;
  const panelBg = this.add.nineslice(xPos, centerY, "GJ_square01", null, panelW, panelH, cornerRadius, cornerRadius, cornerRadius, cornerRadius).setOrigin(0.5);
- this._newsPopup.add(panelBg);
+ newsPanel.add(panelBg);
  const _nl = xPos - panelW / 2, _nr = xPos + panelW / 2, _nt = centerY - panelH / 2, _nb = centerY + panelH / 2;
  const _newsCorners = [
  this.add.image(_nl, _nt, "GJ_GameSheet03", "dailyLevelCorner_001.png").setOrigin(0, 0).setFlipY(true),
@@ -7097,15 +7136,15 @@ _showwippopup() {
  this.add.image(_nl, _nb, "GJ_GameSheet03", "dailyLevelCorner_001.png").setOrigin(0, 1),
  this.add.image(_nr, _nb, "GJ_GameSheet03", "dailyLevelCorner_001.png").setOrigin(1, 1).setFlipX(true)
  ];
- _newsCorners.forEach(c => this._newsPopup.add(c));
+ _newsCorners.forEach(c => newsPanel.add(c));
  const titleText = this.add.bitmapText(xPos, _nt + 42, "goldFont", "News", 52).setOrigin(0.5, 0.5);
- this._newsPopup.add(titleText);
+ newsPanel.add(titleText);
  const _newsTemplate = { date: "November 13th, 2026", title: "MEGA UPDATE - V2.0", notes: ["V2.0 Mega Update. me (rohanis0000) and PinkDev have combined our updates into 1 huge update for more content for you guys to play with.", "This update includes:", "2.2 icons", "Fixed robot and spider icons/layering", "More colors for the icon kit", "Custom icons", "The Vault and Vault of Secrets", "A new update menu (News)", "Custom keybinds", "3D textures fixed", "MANY, MANY BUG FIXES", "2.209 UI updates", "Daily Levels", "Weekly Demons", "Event Levels", "Level Stats", "Progress Bar", "Startpos Revamp", "Fixed/Added a lot of triggers", "Texture fixes", "Object warping", "Mirror portal transitions", "Minor QOL additions", "and more i think i prolly forgot ngl"] };
  const newsPages = (this._newsPages && this._newsPages.length) ? this._newsPages : [_newsTemplate];
  const pageCount = newsPages.length;
  let newsPage = 0;
  const pageText = this.add.bitmapText(_nr - 90, _nt + 62, "goldFont", `1 of ${pageCount}`, 26).setOrigin(1, 0.5);
- this._newsPopup.add(pageText);
+ newsPanel.add(pageText);
  const _refreshNewsPage = () => {
  pageText.setText(`${newsPage + 1} of ${pageCount}`);
  if (this._newsRenderPage) this._newsRenderPage(newsPage);
@@ -7115,7 +7154,7 @@ _showwippopup() {
  const arrowMargin = 40;
  const prevArrow = this.add.image(_nl - arrowMargin, arrowY, "GJ_GameSheet03", "GJ_arrow_01_001.png").setInteractive();
  const nextArrow = this.add.image(_nr + arrowMargin, arrowY, "GJ_GameSheet03", "GJ_arrow_01_001.png").setFlipX(true).setInteractive();
- this._newsPopup.add([prevArrow, nextArrow]);
+ newsPanel.add([prevArrow, nextArrow]);
  this._makeBouncyButton(prevArrow, 1, () => {
  newsPage = (newsPage - 1 + pageCount) % pageCount;
  _refreshNewsPage();
@@ -7131,18 +7170,24 @@ _showwippopup() {
  const boxGfx = this.add.graphics();
  boxGfx.fillStyle(0x8c3b15, 1).fillRoundedRect(boxL, boxT, boxW, boxH, boxRadius);
  boxGfx.fillStyle(0x844022, 1).fillRoundedRect(boxL + boxBorder, boxT + boxBorder, boxW - boxBorder * 2, boxH - boxBorder * 2, boxRadius - boxBorder);
- this._newsPopup.add(boxGfx);
+ newsPanel.add(boxGfx);
 
  const viewT = boxT + boxBorder, viewH = boxH - boxBorder * 2;
  const scrollContent = this.add.container(0, 0);
- this._newsPopup.add(scrollContent);
- const maskShape = this.add.graphics().fillStyle(0xffffff).fillRect(boxL + boxBorder, viewT, boxW - boxBorder * 2, viewH).setVisible(false);
+ newsPanel.add(scrollContent);
+ const maskShape = this.add.graphics().setVisible(false);
+ this._newsPopup.add(maskShape);
+ const updateNewsMask = () => {
+ maskShape.clear().fillStyle(0xffffff).fillRect(boxL + boxBorder + newsPanel.x, viewT, boxW - boxBorder * 2, viewH);
+ };
+ updateNewsMask();
+ this.events.on("postupdate", updateNewsMask);
  scrollContent.setMask(maskShape.createGeometryMask());
 
  const scrollPad = 4;
  const trackX = boxR - boxBorder - 14, trackW = 9;
  const scrollThumb = this.add.rectangle(trackX, viewT + scrollPad, trackW, 40, 0xffffff, 0.22).setOrigin(0.5, 0);
- this._newsPopup.add(scrollThumb);
+ newsPanel.add(scrollThumb);
 
  let contentHeight = 0, scrollY = 0;
  const _updateNewsScroll = () => {
@@ -7194,7 +7239,7 @@ _showwippopup() {
  };
  this._newsRenderPage(0);
 
- const _inBox = (pointer) => pointer.x >= boxL && pointer.x <= boxR && pointer.y >= boxT && pointer.y <= boxB;
+ const _inBox = (pointer) => pointer.x >= boxL + newsPanel.x && pointer.x <= boxR + newsPanel.x && pointer.y >= boxT && pointer.y <= boxB;
  const _onNewsWheel = (pointer, objs, dx, dy) => {
  if (!_inBox(pointer)) return;
  scrollY += dy * 0.5;
@@ -7220,13 +7265,20 @@ _showwippopup() {
  this.input.off("pointerdown", _onNewsDown);
  this.input.off("pointermove", _onNewsMove);
  this.input.off("pointerup", _onNewsUp);
+ this.events.off("postupdate", updateNewsMask);
  maskShape.destroy();
  };
 
  const closeBtn = this.add.image(_nl + 20, _nt + 20, "GJ_WebSheet", "GJ_closeBtn_001.png").setScale(0.8).setInteractive();
- this._newsPopup.add(closeBtn);
+ newsPanel.add(closeBtn);
  this._expandHitArea(closeBtn, 2);
  this._makeBouncyButton(closeBtn, 0.8, () => this._closeNewsPopup());
+ this.tweens.add({
+ targets: newsPanel,
+ x: 0,
+ duration: 900,
+ ease: "Cubic.Out"
+ });
  }
  _closeNewsPopup() {
  if (this._newsCleanup) {
@@ -7357,7 +7409,7 @@ _showwippopup() {
  }
  _buildSpecialLevelPopup(kind) {
  const S = this._specialLevelStyles()[kind];
- const popupKey = `_${kind}LevelPopup`, spinKey = `_${kind}SpinTween`;
+ const popupKey = `_${kind}LevelPopup`, spinKey = `_${kind}SpinTween`, slideKey = `_${kind}SlideTween`;
  if (this[popupKey]) return;
  const xPos = screenWidth / 2;
  const centerY = screenHeight / 2;
@@ -7368,7 +7420,7 @@ _showwippopup() {
  const background = this.add.rectangle(xPos, centerY, screenWidth, screenHeight, 0, 100 / 255);
  background.setInteractive();
  this[popupKey].add(background);
- const panelGroup = this.add.container(0, 0);
+ const panelGroup = this.add.container(-screenWidth, 0).setScrollFactor(0);
  this[popupKey].add(panelGroup);
  const cornerRadius = this.textures.get("GJ_square01").source[0].width * 0.325;
  const panelBg = this.add.nineslice(xPos, centerY, S.panelTex, null, panelW, panelH, cornerRadius, cornerRadius, cornerRadius, cornerRadius).setOrigin(0.5);
@@ -7420,6 +7472,12 @@ _showwippopup() {
  panelGroup.add(closeBtn);
  this._expandHitArea(closeBtn, 2);
  this._makeBouncyButton(closeBtn, 1, () => this._closeSpecialLevelPopup(kind));
+ this[slideKey] = this.tweens.add({
+ targets: panelGroup,
+ x: 0,
+ duration: 900,
+ ease: "Cubic.Out"
+ });
  const cellW = 720, cellH = 220;
  const cellCX = xPos, cellCY = centerY + 25;
  const cl = cellCX - cellW / 2, ct = cellCY - cellH / 2;
@@ -7597,8 +7655,9 @@ _showwippopup() {
  };
  }
  _closeSpecialLevelPopup(kind) {
- const popupKey = `_${kind}LevelPopup`, spinKey = `_${kind}SpinTween`;
+ const popupKey = `_${kind}LevelPopup`, spinKey = `_${kind}SpinTween`, slideKey = `_${kind}SlideTween`;
  if (this[spinKey]) { this[spinKey].stop(); this[spinKey] = null; }
+ if (this[slideKey]) { this[slideKey].stop(); this[slideKey] = null; }
  if (this[popupKey]) {
  this[popupKey].destroy();
  this[popupKey] = null;
@@ -10990,7 +11049,7 @@ window.open("https://github.com/web-dashers/web-dashers.github.io", "_blank"); }
  if (this._startPosGui) this._startPosGui.setVisible(v && this._startPosCount > 0);
  if (this._startPosText) this._startPosText.setText(`0/${this._startPosCount || 0}`);
  });
- addToggle(-65, "Smart StartPos", "auto sets startpos settings",
+ addToggle(-65, "Smart StartPos", "This is the info message",
  () => !!window.smartStartPos,
  (v) => { window.smartStartPos = v; });
 
@@ -11133,7 +11192,7 @@ window.open("https://github.com/web-dashers/web-dashers.github.io", "_blank"); }
  { id: "jump2", label: "Jump P2", cat: "gameplay" },
  { id: "pause", label: "Pause", cat: "gameplay" },
  { id: "restart", label: "Restart", cat: "gameplay" },
- { id: "noclip", label: "Noclip", cat: "gameplay" },
+ { id: "Ignore Damage", label: "Ignore Damage", cat: "gameplay" },
  { id: "showHitboxes", label: "Show Hitboxes", cat: "gameplay" },
  { id: "practice", label: "Practice Mode", cat: "practice" },
  { id: "startPosPrev", label: "StartPos Prev", cat: "practice" },

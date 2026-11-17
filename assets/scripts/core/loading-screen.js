@@ -237,7 +237,10 @@ class BootScene extends Phaser.Scene {
       "S-slopes!~",
       "Anything but slopes",
       "Laggiest game ever.",
-      "GeometFree Dash!"
+      "GeometFree Dash!",
+      "I AM a fricking dasher.",
+      "web dash is steal all your level",
+      "Have you ever wanted levels free?"
     ];
     const sliderOriginX = cx - 105;
     const sliderOriginY = cy + 110;
@@ -376,6 +379,8 @@ class BootScene extends Phaser.Scene {
 
       this.load.audio("menu_music", "assets/music/menuLoop.mp3");
       this.load.audio("StayInsideMe", "assets/music/StayInsideMe.mp3");
+      this.load.audio("secretLoop", "assets/music/secretLoop.mp3");
+      this.load.audio("secretLoop2", "assets/music/secretLoop2.mp3");
 
       /*for (const lvlarray of window.allLevels) {
         this.load.text(lvlarray[2], "assets/levels/" + lvlarray[2].split("_")[1] + ".txt");
